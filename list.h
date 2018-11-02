@@ -7,7 +7,7 @@ typedef struct node
 	int value;
 }node;
 
-typedef struct
+typedef struct list
 {
 	node *head;
 }list;
