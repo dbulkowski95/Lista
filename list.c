@@ -30,6 +30,7 @@ int clear(list *list_p)
 {
 	if(!list_p)
 	{
+		printf("Uninitalized list\n");
 		return -1;
 	}
 	if(list_p->head == NULL)
@@ -53,6 +54,7 @@ int print(const list *print_p)
 {
 	if(!print_p)
 	{
+		printf("Uninitalized list\n");
 		return -1;
 	}
 	node *print_list_p = print_p->head;
@@ -74,6 +76,7 @@ int pop_front(list *pop_list_p)
 {
 	if(!pop_list_p)
 	{
+		printf("Uninitalized list\n");
 		return -1;
 	}
 	if(pop_list_p->head == NULL)
@@ -92,6 +95,7 @@ int pop_back(list *pop_list_p)
 {
 	if(!pop_list_p)
 	{
+		printf("Uninitalized list\n");
 		return -1;
 	}
 	if(pop_list_p->head == NULL)
