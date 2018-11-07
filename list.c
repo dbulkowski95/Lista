@@ -4,19 +4,21 @@
 
 int push_back(list *list_p, int data)
 {
-	if(!list_p)
+	if (!list_p)
 	{
 		printf("Uninitalized list\n");
 	    return -1;
 	}
-	if(list_p->head == NULL){
+	if (list_p->head == NULL)
+	{
 		list_p->head = malloc(sizeof(node));
 		list_p->head->value = data;
 		list_p->head->nextNode = NULL;
 		return 0;
 	}
 	node *current_node_p = list_p->head;
-	while(current_node_p->nextNode != NULL){
+	while (current_node_p->nextNode != NULL)
+	{
 		current_node_p = current_node_p->nextNode;
 	}
 	current_node_p->nextNode = malloc(sizeof(node));
@@ -28,18 +30,18 @@ int push_back(list *list_p, int data)
 
 int clear(list *list_p)
 {
-	if(!list_p)
+	if (!list_p)
 	{
 		printf("Uninitalized list\n");
 		return -1;
 	}
-	if(list_p->head == NULL)
+	if (list_p->head == NULL)
 	{
 		printf("no list to clear\n");
 		return 0;
 	}
 	node *temp_node_p = NULL;
-	while(list_p->head != NULL)
+	while (list_p->head != NULL)
 	{
 		temp_node_p = list_p->head->nextNode;
 		free(list_p->head);
@@ -52,19 +54,19 @@ int clear(list *list_p)
 
 int print(const list *print_p)
 {
-	if(!print_p)
+	if (!print_p)
 	{
 		printf("Uninitalized list\n");
 		return -1;
 	}
 	node *print_list_p = print_p->head;
-	while(print_list_p != NULL)
+	while (print_list_p != NULL)
 	{
 		printf("|H->value: %d|\n",print_list_p->value);
 		printf("|H->ptr:%p|\n",print_list_p->nextNode);
 		print_list_p = print_list_p->nextNode;
 	}
-	if(print_p->head == NULL)
+	if (print_p->head == NULL)
 	{
 		printf("Empty list...\n");
 		return 0;
@@ -72,38 +74,42 @@ int print(const list *print_p)
 	return 1;
 }
 
-int pop_front(list *pop_list_p)
+int pop_front(list *pop_list_p, int *returnValue)
 {
-	if(!pop_list_p)
+	if (!pop_list_p)
 	{
 		printf("Uninitalized list\n");
 		return -1;
 	}
-	if(pop_list_p->head == NULL)
+	if (pop_list_p->head == NULL)
 	{
 		printf("Empty list...\n");
 		return 0;
+	}
+	if (returnValue)
+	{
+		*returnValue = pop_list_p->head->value;
 	}
 	node *temp_node_p = pop_list_p->head;
 	pop_list_p->head = pop_list_p->head->nextNode;
 	free(temp_node_p);
 	temp_node_p = NULL;
-	return 1;
+	return 0;
 }
 
-int pop_back(list *pop_list_p)
+int pop_back(list *pop_list_p, int *returnValue)
 {
-	if(!pop_list_p)
+	if (!pop_list_p)
 	{
 		printf("Uninitalized list\n");
 		return -1;
 	}
-	if(pop_list_p->head == NULL)
+	if (pop_list_p->head == NULL)
 	{
 		printf("Empty list...\n");
 		return 0;
 	}
-	else if(pop_list_p->head->nextNode == NULL)
+	else if (pop_list_p->head->nextNode == NULL)
 	{
 		free(pop_list_p->head);
 		pop_list_p->head = NULL;
@@ -114,10 +120,14 @@ int pop_back(list *pop_list_p)
 	{
 		node *curr_node_p = pop_list_p->head->nextNode;
 		node *prev_node_p = pop_list_p->head;
-		while(curr_node_p->nextNode != NULL)
+		while (curr_node_p->nextNode != NULL)
 		{
 			curr_node_p = curr_node_p->nextNode;
 			prev_node_p = prev_node_p->nextNode;
+		}
+		if (returnValue)
+		{
+			*returnValue = pop_list_p->head->value;
 		}
 		free(curr_node_p);
 		curr_node_p = NULL;

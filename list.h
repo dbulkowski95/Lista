@@ -13,8 +13,8 @@ typedef struct list
 }list;
 
 int push_back(list *list_p, int data);
-int pop_front(list *pop_list_p);
-int pop_back(list *pop_list_p);
+int pop_front(list *pop_list_p, int *returnValue);
+int pop_back(list *pop_list_p, int *returnValue);
 list *init(void);
 int clear(list *list_p);
 int print(const list *list_p);
