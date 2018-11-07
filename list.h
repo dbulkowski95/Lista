@@ -5,18 +5,18 @@ typedef struct node
 {
 	struct node *nextNode;
 	int value;
-}node;
+}nodeS;
 
 typedef struct list
 {
-	node *head;
-}list;
+	nodeS *head;
+}listS;
 
-int push_back(list *list_p, int data);
-int pop_front(list *pop_list_p, int *returnValue);
-int pop_back(list *pop_list_p, int *returnValue);
-list *init(void);
-int clear(list *list_p);
-int print(const list *list_p);
+int push_back(listS *list_p, int data);
+int pop_front(listS *pop_list_p, int *returnValue);
+int pop_back(listS *pop_list_p, int *returnValue);
+listS *init(void);
+int clear(listS *list_p);
+int print(const listS *list_p);
 
 #endif /* LIST_H_ */
