@@ -1,152 +1,135 @@
-//#include "list.h"
-//#include <criterion.h>
-//#include <stdio.h>
-//
-//
-//Test(InitAndClear, init)
-//{
-//	list *list_p = init();
-//	pop_back(list_p);
-//	push_back(list_p,1);
-//	push_back(list_p,2);
-//	push_back(list_p,3);
-//	pop_back(list_p);
-//	pop_front(list_p);
-//	clear(list_p);
-//	pop_front(list_p);
-//	pop_back(list_p);
-//	free(list_p);
-//}
-//
-//Test(InitAddClear, init)
-//{
-//	list *list_p = init();
-//	push_back(list_p,1);
-//	clear(list_p);
-//	free(list_p);
-//}
-//
-//
-//Test(simpleTestSuite, pushLotOfNumbers)
-//{
-//	static int counter = 0;
-//	list *list_p = init();
-//	for(size_t i = 0;i<1000;i++){
-//		push_back(list_p,i);
-//		counter++;
-//	}
-//	for(size_t i = 0;i<500;i++){
-//		pop_back(list_p);
-//		counter--;
-//	}
-//	clear(list_p);
-//	printf("->%d\n", counter);
-//	free(list_p);
-//}
-//
-//Test(simpleTestSuite, PrintBeforePush1)
-//{
-//	list *list_p = init();
-//	print(list_p);
-//	for(size_t i = 0;i<10;i++){
-//		push_back(list_p,i);
-//	}
-//	print(list_p);
-//	clear(list_p);
-//	print(list_p);
-//	free(list_p);
-//}
-//
-//
-//	Test(simpleTestSuite, PrintBeforePush)
-//	{
-//		list *list_p = init();
-//		print(list_p);
-//		clear(list_p);
-//		print(list_p);
-//
-//		for(size_t i = 0;i<1;i++){
-//			printf("add\n");
-//			push_back(list_p,i);
-//		}
-//		print(list_p);
-//		clear(list_p);
-//		print(list_p);
-//
-//		for(size_t i = 0;i<2;i++){
-//			push_back(list_p,i);
-//		}
-//		print(list_p);
-//		clear(list_p);
-//		print(list_p);
-//
-//		for(size_t i = 0;i<3;i++){
-//			push_back(list_p,i);
-//		}
-//		print(list_p);
-//		clear(list_p);
-//		print(list_p);
-//
-//		for(size_t i = 0;i<300;i++){
-//			push_back(list_p,i);
-//		}
-//		print(list_p);
-//		clear(list_p);
-//		print(list_p);
-//
-//		free(list_p);
-//	}
-//
-//	Test(clear_tests, ClearWithLotpush_backs)
-//	{
-//	    list* HEAD = init();
-//
-//	   push_back(HEAD,3);
-//	   push_back(HEAD,3);
-//	   push_back(HEAD,3);
-//	   push_back(HEAD,3);
-//	   clear(HEAD);
-//	   cr_assert_null(HEAD->head,"Lista po uzyciu funkcji clear nie jest zakonczona NULLem");
-//	   free(HEAD);
-//	}
-//
-//	Test(print_tests, PrintAfterInit)
-//	{
-//	    list* HEAD = init();
-//	    int i = print(HEAD);
-//	    cr_expect(i,"Blad funkcji print dla braku NODE'ow");
-//	    free(HEAD);
-//	}
-//
-//	Test(clear_tests, OnlyInitAndClear)
-//	{
-//	    list* HEAD = init();
-//	    clear(HEAD);
-//	    cr_assert_null(HEAD->head,"Zainicjalizowana lista po użyciu clear() nie jest zakończona NULLem");
-//	    free(HEAD);
-//	}
-//
-//	Test(pop_tests, PopFirstNode)
-//	{
-//	    list* HEAD = init();
-//	    int rand_val = 3;
-//	    push_back(HEAD,rand_val);
-//	    pop_front(HEAD);
-//	    cr_assert_null(HEAD->head,"HEAD nie wskazuje na NULL po użyciu pop() na jednoelementowej liście");
-//	    free(HEAD);
-//	}
-//
-//	Test(pop_tests, PopMultipleNode)
-//	{
-//	    list* HEAD = init();
-//	    int rand_val = 3;
-//	    for(int i=0; i<6; i++)
-//	    {
-//	        push_back(HEAD,i*rand_val);
-//	    }
-//	    pop_front(HEAD);
-//	    pop_front(HEAD);
-//	    cr_assert_not_null(HEAD->head,"HEAD wskazuje na NULL po użyciu pop() na wieloelementowej liście (a nie powinien)");
-//	    clear(HEAD);
-//	    free(HEAD);
-//	}
+#include "list.h"
+#include <criterion.h>
+#include <limits.h>
+#include <stdio.h>
+
+
+/*CLEAR() na poczatku uzyty w celu usuniecia przeciekow w valgrindzie*/
+Test(InitTest, init_check)
+{
+	listS *listTester = init();
+	cr_expect_not_null(listTester, "Correct allocation");
+	clear(&listTester);
+}
+
+Test(InitTest, init_false)
+{
+	listS *listTester = init();
+	cr_expect(listTester == NULL, "Expect false");
+	clear(&listTester);
+}
+
+Test(InitTest, init_head_true)
+{
+	listS *listTester = init();
+	cr_expect(listTester->head == NULL, "Expect true");
+	clear(&listTester);
+}
+
+Test(InitTest, init_head_false)
+{
+	listS *listTester = init();
+	cr_expect(listTester->head != NULL, "Expect false");
+	clear(&listTester);
+}
+
+Test(ClearTest, clear_after_init_list_true)
+{
+	listS *listTester = init();
+	clear(&listTester);
+	cr_expect(listTester == NULL, "Expect true");
+}
+
+Test(push_back_test, one_push_true)
+{
+	listS *listTester = init();
+	push_back(listTester, 0);
+	cr_expect(listTester->head != NULL, "Expect true");
+	clear(&listTester);
+	cr_expect(listTester == NULL, "Expect true");
+}
+
+Test(push_back_test, one_few_true)
+{
+	listS *listTester = init();
+	for (int i = 0; i <1000; i++)
+	{
+		push_back(listTester, i);
+	}
+	cr_expect(listTester->head != NULL, "Expect true");
+	clear(&listTester);
+	cr_expect(listTester == NULL, "Expect true");
+}
+
+Test(push_back_test, Uninitalized_list)
+{
+	listS *listTester = NULL;
+	cr_expect(push_back(listTester,0) == -1, "Expect true");
+	listTester = init();
+	cr_expect(push_back(listTester,1) == 0, "Expect true");
+	clear(&listTester);
+}
+
+Test(push_back_test, bad_second_arg_in_function)
+{
+	listS *listTester = init();
+	cr_expect(push_back(listTester,INT_MAX +1) == 0, "Expect true");
+	cr_expect(push_back(listTester,INT_MAX) == 0, "Expect true");
+	cr_expect(push_back(listTester,(-1)*INT_MAX) == 0, "Expect true");
+	cr_expect(push_back(listTester,'c') == 0, "Expect true");
+	cr_expect(push_back(listTester,"asfb") == 0, "Expect true");
+	clear(&listTester);
+}
+
+Test(popback_tests, pop_uninit_list)
+{
+	listS *listTester = NULL;
+	int returnValue = 0;
+	cr_expect(pop_back(listTester,&returnValue) == -1, "Expect pop equal -1");
+	listTester = init();
+	for (int i = 0; i <1000; i++)
+	{
+		cr_expect(push_back(listTester, i) == 0);
+	}
+	cr_expect(pop_back(listTester,&returnValue) == 0, "Expect pop equal 0");
+	cr_expect_geq(returnValue, 0, "Expect value greater or equal 0");
+	clear(&listTester);
+}
+
+Test(popback_tests, push_and_pop)
+{
+	listS *listTester = init();
+	int returnValue = 0;
+	push_back(listTester, 1);
+	pop_back(listTester,&returnValue);
+	cr_expect_null(listTester->head, "Expect head equal null");
+	clear(&listTester);
+}
+
+Test(popfront_tests, pop_uninit_list)
+{
+	listS *listTester = NULL;
+	int returnValue = 0;
+	cr_expect(pop_front(listTester,&returnValue) == -1, "Expect pop equal -1");
+	listTester = init();
+	cr_expect(listTester->head == NULL, "Expect true");
+	cr_expect(pop_front(listTester,&returnValue) == 0, "Expect pop equal 0");
+	for (int i = 0; i <1000; i++)
+	{
+		cr_expect(push_back(listTester, i) == 0);
+	}
+	cr_expect(pop_front(listTester,&returnValue) == 0, "Expect pop equal 0");
+	cr_expect_geq(returnValue, 0, "Expect value greater or equal 0");
+	clear(&listTester);
+}
+
+Test(popfront_tests, push_and_pop)
+{
+	listS *listTester = init();
+	int returnValue = 0;
+	push_back(listTester, 1);
+	pop_front(listTester,&returnValue);
+	cr_expect_null(listTester->head, "Expect head equal null");
+	cr_expect_geq(returnValue, 0, "Expect value greater or equal 0");
+	clear(&listTester);
+}
