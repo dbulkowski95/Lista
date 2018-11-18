@@ -1,13 +1,11 @@
 #include "list.h"
 #include <stdio.h>
 #include <stdlib.h>
-#define PRINT(expr) (void)printf(#expr"\n")
 
 int push_back(listS *list_p, const int data)
 {
 	if (!list_p)
 	{
-		PRINT(Uninitalized list);
 	    return -1;
 	}
 	if (list_p->head == NULL)
@@ -33,7 +31,6 @@ int push_front(listS *list_p, const int data)
 {
 	if (!list_p)
 	{
-		PRINT(Uninitalized list);
 	    return -1;
 	}
 	if (list_p->head == NULL)
@@ -55,12 +52,10 @@ int clear(listS **listToClear)
 	listS *list_p = *listToClear;
 	if (!listToClear)
 	{
-		PRINT(Uninitalized list);
 		return -1;
 	}
 	if (list_p->head == NULL)
 	{
-		PRINT(no list to clear);
 		free(*listToClear);
 		*listToClear = NULL;
 		return 0;
@@ -73,7 +68,6 @@ int clear(listS **listToClear)
 		list_p->head = NULL;
 		list_p->head = temp_node_p;
 	}
-	PRINT(List Clear. No nodes here);
 	free(*listToClear);
 	*listToClear = NULL;
 	return 0;
@@ -83,7 +77,6 @@ int print(const listS *print_p)
 {
 	if (!print_p)
 	{
-		PRINT(Uninitalized list);
 		return -1;
 	}
 	nodeS *print_list_p = print_p->head;
@@ -95,7 +88,6 @@ int print(const listS *print_p)
 	}
 	if (print_p->head == NULL)
 	{
-		PRINT(Empty list...);
 		return 0;
 	}
 	return 1;
@@ -105,12 +97,10 @@ int pop_front(listS *pop_list_p, int *returnValue)
 {
 	if (!pop_list_p)
 	{
-		PRINT(Uninitalized list);
 		return -1;
 	}
 	if (pop_list_p->head == NULL)
 	{
-		PRINT(Empty list...);
 		return 0;
 	}
 	if (returnValue)
@@ -128,19 +118,16 @@ int pop_back(listS *pop_list_p, int *returnValue)
 {
 	if (!pop_list_p)
 	{
-		PRINT(Uninitalized list);
 		return -1;
 	}
 	if (pop_list_p->head == NULL)
 	{
-		PRINT(Empty list...);
 		return 0;
 	}
 	else if (pop_list_p->head->nextNode == NULL)
 	{
 		free(pop_list_p->head);
 		pop_list_p->head = NULL;
-		PRINT(Removed last element.);
 		return 0;
 	}
 	else
