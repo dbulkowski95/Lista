@@ -1,7 +1,5 @@
 #include "list.h"
-#include <criterion.h>
-#include <limits.h>
-#include <stdio.h>
+#include <criterion/criterion.h>
 
 
 /*CLEAR() na poczatku uzyty w celu usuniecia przeciekow w valgrindzie*/
@@ -79,9 +77,7 @@ Test (push_front, pushfront_uninit_list)
 	push_front(listTester, 2);
 	push_front(listTester, 3);
 	cr_expect(listTester->head->value == 3, "Expect last push front");
-	print(listTester);
 	push_back(listTester, 666);
-	print(listTester);
 	clear(&listTester);
 }
 
