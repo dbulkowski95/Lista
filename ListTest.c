@@ -9,28 +9,28 @@ Test(InitTest, init_check)
 {
 	listS *listTester = init();
 	cr_expect_not_null(listTester, "Correct allocation");
-	clear(&listTester);
+	free(listTester);
 }
 
 Test(InitTest, init_false)
 {
 	listS *listTester = init();
 	cr_expect(listTester == NULL, "Expect false");
-	clear(&listTester);
+	free(listTester);
 }
 
 Test(InitTest, init_head_true)
 {
 	listS *listTester = init();
 	cr_expect(listTester->head == NULL, "Expect true");
-	clear(&listTester);
+	free(listTester);
 }
 
 Test(InitTest, init_head_false)
 {
 	listS *listTester = init();
 	cr_expect(listTester->head != NULL, "Expect false");
-	clear(&listTester);
+	free(listTester);
 }
 
 Test(ClearTest, clear_after_init_list_true)
@@ -70,14 +70,18 @@ Test(push_back_test, Uninitalized_list)
 	clear(&listTester);
 }
 
-Test(push_back_test, bad_second_arg_in_function)
+Test (push_front, pushfront_uninit_list)
 {
-	listS *listTester = init();
-	cr_expect(push_back(listTester,INT_MAX +1) == 0, "Expect true");
-	cr_expect(push_back(listTester,INT_MAX) == 0, "Expect true");
-	cr_expect(push_back(listTester,(-1)*INT_MAX) == 0, "Expect true");
-	cr_expect(push_back(listTester,'c') == 0, "Expect true");
-	cr_expect(push_back(listTester,"asfb") == 0, "Expect true");
+	listS *listTester = NULL;
+	cr_expect(push_front(listTester, 1) == -1, "Expect -1");
+	listTester = init();
+	push_front(listTester, 1);
+	push_front(listTester, 2);
+	push_front(listTester, 3);
+	cr_expect(listTester->head->value == 3, "Expect last push front");
+	print(listTester);
+	push_back(listTester, 666);
+	print(listTester);
 	clear(&listTester);
 }
 
@@ -103,6 +107,7 @@ Test(popback_tests, push_and_pop)
 	push_back(listTester, 1);
 	pop_back(listTester,&returnValue);
 	cr_expect_null(listTester->head, "Expect head equal null");
+	cr_expect(returnValue == 1);
 	clear(&listTester);
 }
 

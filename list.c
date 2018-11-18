@@ -29,6 +29,27 @@ int push_back(listS *list_p, const int data)
 	return 0;
 }
 
+int push_front(listS *list_p, const int data)
+{
+	if (!list_p)
+	{
+		PRINT(Uninitalized list);
+	    return -1;
+	}
+	if (list_p->head == NULL)
+	{
+		list_p->head = (nodeS*)malloc(sizeof(nodeS));
+		list_p->head->value = data;
+		list_p->head->nextNode = NULL;
+		return 0;
+	}
+	nodeS *current_node_p = list_p->head;
+	list_p->head = (nodeS*)malloc(sizeof(nodeS));
+	list_p->head->value = data;
+	list_p->head->nextNode = current_node_p;
+	return 0;
+}
+
 int clear(listS **listToClear)
 {
 	listS *list_p = *listToClear;

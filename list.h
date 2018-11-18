@@ -12,7 +12,8 @@ typedef struct list
 	nodeS *head;
 }listS;
 
-int push_back(listS *list_p, int data);
+int push_back(listS *list_p, const int data);
+int push_front(listS *list_p, const int data);
 int pop_front(listS *pop_list_p, int *returnValue);
 int pop_back(listS *pop_list_p, int *returnValue);
 listS *init(void);
